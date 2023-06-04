@@ -4,6 +4,7 @@ Basic version of React implementing core features such as createElement, render 
 ## Preface
 - This project is using create-react-app configuration(Babel) as a base.
 - The RFS(React from Scratch) package is located [here](https://github.com/SimpleLuke/React-from-Scratch/blob/main/src/RFS/react-from-scratch.js).
+- See the usage of RFS in `index.js` [here](https://github.com/SimpleLuke/React-from-Scratch/blob/main/src/index.js).
 
 ## How to Use
 
