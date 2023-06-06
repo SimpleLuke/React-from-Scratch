@@ -42,16 +42,36 @@ function createDom(fiber) {
   return dom;
 }
 
+function commitRoot() {
+  // Add nodes to root dom
+  commitWork(wipRoot.child);
+  wipRoot = null;
+}
+
+function commitWork(fiber) {
+  if (!fiber) {
+    return;
+  }
+
+  const domParent = fiber.parent.dom;
+  domParent.appendChild(fiber.dom);
+  commitWork(fiber.child);
+  commitWork(fiber.sibling);
+}
+
 function render(element, container) {
-  nextUnitOfWork = {
+  wipRoot = {
     dom: container,
     props: {
       children: [element],
     },
   };
+
+  nextUnitOfWork = wipRoot;
 }
 
 let nextUnitOfWork = null;
+let wipRoot = null;
 
 function workloop(deadline) {
   let shouldYield = false;
@@ -59,6 +79,10 @@ function workloop(deadline) {
   while (nextUnitOfWork && !shouldYield) {
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
     shouldYield = deadline.timeRemaining() < 1;
+  }
+
+  if (!nextUnitOfWork && wipRoot) {
+    commitRoot();
   }
 
   requestIdleCallback(workloop);
@@ -71,11 +95,6 @@ function performUnitOfWork(fiber) {
   // create the actual DOM node associated with the current fiber if it doesn't already exist.
   if (!fiber.dom) {
     fiber.dom = createDom(fiber);
-  }
-
-  //If the fiber does not have a parent, it means it is the root fiber representing the top-level element being rendered.
-  if (!fiber.parent) {
-    fiber.parent.dom.appendChild(fiber.dom);
   }
 
   // Create a new fiber for each child
@@ -118,4 +137,5 @@ function performUnitOfWork(fiber) {
   }
 }
 
+console.log(nextUnitOfWork);
 export default RFS;

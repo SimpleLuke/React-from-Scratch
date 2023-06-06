@@ -13,6 +13,13 @@ const element = (
   <div id="foo">
     <a href=".">bar</a>
     <br />
+    <div>
+      <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+      </ul>
+    </div>
   </div>
 );
 
