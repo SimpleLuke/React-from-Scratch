@@ -9,19 +9,20 @@ import RFS from "./RFS/react-from-scratch";
 
 /** @jsxRuntime classic */
 /** @jsx RFS.createElement */
-const element = (
-  <div id="foo">
-    <a href=".">bar</a>
-    <br />
-    <div>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-      </ul>
-    </div>
-  </div>
-);
-
 const container = document.getElementById("root");
-RFS.render(element, container);
+
+const updateValue = (e) => {
+  rerender(e.target.value);
+};
+
+const rerender = (value) => {
+  const element = (
+    <div>
+      <input onInput={updateValue} value={value} />
+      <h2>My name is {value}</h2>
+    </div>
+  );
+  RFS.render(element, container);
+};
+
+rerender("Luke");
