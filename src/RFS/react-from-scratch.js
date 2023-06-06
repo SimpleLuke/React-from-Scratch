@@ -44,4 +44,23 @@ function render(element, container) {
   container.appendChild(dom);
 }
 
+let nextUnitOfWork = null;
+
+function workloop(deadline) {
+  let shouldYield = false;
+
+  while (nextUnitOfWork && !shouldYield) {
+    nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+    shouldYield = deadline.timeRemaining() < 1;
+  }
+
+  requestIdleCallback(workloop);
+}
+
+requestIdleCallback(workloop);
+
+function performUnitOfWork(nextUnitOfWork) {
+  //TODO
+}
+
 export default RFS;
