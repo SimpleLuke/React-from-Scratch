@@ -9,28 +9,24 @@ import RFS from "./RFS/react-from-scratch";
 
 /** @jsxRuntime classic */
 /** @jsx RFS.createElement */
-
 function App(props) {
-  return <h1>Hi {props.name}</h1>;
+  const updateValue = (e) => {
+    rerender(e.target.value);
+  };
+
+  return (
+    <div>
+      <h1>Hi {props.name}</h1>
+      <input onInput={updateValue} value={props.value} />
+      <h2>My name is {props.value}</h2>
+    </div>
+  );
 }
-const element = <App name="foo" />;
-const container = document.getElementById("root");
-RFS.render(element, container);
 
-// const container = document.getElementById("root");
+const rerender = (value) => {
+  const element = <App name="friends" value={value} />;
+  const container = document.getElementById("root");
+  RFS.render(element, container);
+};
 
-// const updateValue = (e) => {
-//   rerender(e.target.value);
-// };
-
-// const rerender = (value) => {
-//   const element = (
-//     <div>
-//       <input onInput={updateValue} value={value} />
-//       <h2>My name is {value}</h2>
-//     </div>
-//   );
-//   RFS.render(element, container);
-// };
-
-// rerender("Luke");
+rerender("Luke");
