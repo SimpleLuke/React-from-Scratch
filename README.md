@@ -13,7 +13,7 @@ Basic version of React implementing core features such as createElement, render 
 2. Run `npm install` on your terminal.
 3. Run `npm start` to visit the output on `http://localhost:3000/`
 
-## Features (Work in progress)
+## Features
 See below the features included in this implementation of React.
 
 - createElement function
@@ -23,7 +23,7 @@ See below the features included in this implementation of React.
 - Function Components
 - useState Hooks
 
-## Run Tests
+## Run Tests (Work in progress)
 - RFS(React from Scratch) functions are all tested.
 - Run `npm test` to see the result.
 
