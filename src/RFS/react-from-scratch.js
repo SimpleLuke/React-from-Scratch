@@ -205,6 +205,7 @@ function useState(initial) {
     wipFiber.alternate &&
     wipFiber.alternate.hooks &&
     wipFiber.alternate.hooks[hookIndex];
+
   const hook = {
     state: oldHook ? oldHook.state : initial,
     queue: [],
@@ -242,6 +243,9 @@ function updateHostComponent(fiber) {
 }
 
 function reconcileChildren(wipFiber, elements) {
+  if (!wipFiber || !elements) {
+    return;
+  }
   let index = 0;
   let oldFiber = wipFiber.alternate && wipFiber.alternate.child;
   let prevSibling = null;
