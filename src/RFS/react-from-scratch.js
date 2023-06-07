@@ -262,7 +262,11 @@ function useState(initial) {
 
   // Process state updates
   hook.queue.forEach((action) => {
-    hook.state = action(hook.state);
+    if (action instanceof Function) {
+      hook.state = action(hook.state);
+    } else {
+      hook.state = action;
+    }
   });
   hook.queue = [];
 
