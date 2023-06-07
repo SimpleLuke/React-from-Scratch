@@ -162,6 +162,9 @@ function workloop(deadline) {
 requestIdleCallback(workloop);
 
 function performUnitOfWork(fiber) {
+  if (!fiber) {
+    return;
+  }
   // Create new node and append to dom
   const isFunctionComponent = fiber.type instanceof Function;
 
