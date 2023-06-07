@@ -27,17 +27,17 @@ export function createTextElement(text) {
 }
 
 function createDom(fiber) {
-  const dom =
+  const domElement =
     fiber.type === "TEXT_ELEMENT"
       ? document.createTextNode("")
       : document.createElement(fiber.type);
 
-  updateDom(dom, {}, fiber.props);
+  updateDom(domElement, {}, fiber.props);
 
-  return dom;
+  return domElement;
 }
 
-function updateDom(dom, prevProps, nextProps) {
+function updateDom(domElement, prevProps, nextProps) {
   const isEvent = (key) => key.startsWith("on");
   const isProperty = (key) => key !== "children" && !isEvent(key);
   const isNew = (prev, next) => (key) => prev[key] !== next[key];
@@ -49,7 +49,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter((key) => !(key in nextProps) || isNew(prevProps, nextProps)(key))
     .forEach((name) => {
       const eventType = name.toLowerCase().substring(2);
-      dom.removeEventListener(eventType, prevProps[name]);
+      domElement.removeEventListener(eventType, prevProps[name]);
     });
 
   // Remove old properties
@@ -57,7 +57,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter(isProperty)
     .filter(isGone(prevProps, nextProps))
     .forEach((name) => {
-      dom[name] = "";
+      domElement[name] = "";
     });
 
   // Set new or changed properties
@@ -65,7 +65,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter(isProperty)
     .filter(isNew(prevProps, nextProps))
     .forEach((name) => {
-      dom[name] = nextProps[name];
+      domElement[name] = nextProps[name];
     });
 
   // Add event listeners
@@ -74,7 +74,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter(isNew(prevProps, nextProps))
     .forEach((name) => {
       const eventType = name.toLowerCase().substring(2);
-      dom.addEventListener(eventType, nextProps[name]);
+      domElement.addEventListener(eventType, nextProps[name]);
     });
 }
 
@@ -92,16 +92,16 @@ function commitWork(fiber) {
   }
 
   let domParentFiber = fiber.parent;
-  while (!domParentFiber.dom) {
+  while (!domParentFiber.domElement) {
     domParentFiber = domParentFiber.parent;
   }
 
-  const domParent = domParentFiber.dom;
+  const domParent = domParentFiber.domElement;
 
-  if (fiber.effectTag === "PLACEMENT" && fiber.dom != null) {
-    domParent.appendChild(fiber.dom);
-  } else if (fiber.effectTag === "UPDATE" && fiber.dom != null) {
-    updateDom(fiber.dom, fiber.alternate.props, fiber.props);
+  if (fiber.effectTag === "PLACEMENT" && fiber.domElement != null) {
+    domParent.appendChild(fiber.domElement);
+  } else if (fiber.effectTag === "UPDATE" && fiber.domElement != null) {
+    updateDom(fiber.domElement, fiber.alternate.props, fiber.props);
   } else if (fiber.effectTag === "DELETION") {
     commitDeletion(fiber, domParent);
   }
@@ -111,8 +111,8 @@ function commitWork(fiber) {
 }
 
 function commitDeletion(fiber, domParent) {
-  if (fiber.dom) {
-    domParent.removeChild(fiber.dom);
+  if (fiber.domElement) {
+    domParent.removeChild(fiber.domElement);
   } else {
     commitDeletion(fiber.child, domParent);
   }
@@ -120,7 +120,7 @@ function commitDeletion(fiber, domParent) {
 
 function render(element, container) {
   wipRoot = {
-    dom: container,
+    domElement: container,
     props: {
       children: [element],
     },
@@ -207,7 +207,7 @@ function useState(initial) {
   const setState = (action) => {
     hook.queue.push(action);
     wipRoot = {
-      dom: currentRoot.dom,
+      domElement: currentRoot.domElement,
       props: currentRoot.props,
       alternate: currentRoot,
     };
@@ -222,8 +222,8 @@ function useState(initial) {
 
 function updateHostComponent(fiber) {
   // create the actual DOM node associated with the current fiber if it doesn't already exist.
-  if (!fiber.dom) {
-    fiber.dom = createDom(fiber);
+  if (!fiber.domElement) {
+    fiber.domElement = createDom(fiber);
   }
 
   reconcileChildren(fiber, fiber.props.children);
@@ -246,7 +246,7 @@ function reconcileChildren(wipFiber, elements) {
       newFiber = {
         type: oldFiber.type,
         props: element.props,
-        dom: oldFiber.dom,
+        domElement: oldFiber.domElement,
         parent: wipFiber,
         alternate: oldFiber,
         effectTag: "UPDATE",
@@ -258,7 +258,7 @@ function reconcileChildren(wipFiber, elements) {
       newFiber = {
         type: element.type,
         props: element.props,
-        dom: null,
+        domElement: null,
         parent: wipFiber,
         alternate: null,
         effectTag: "PLACEMENT",
