@@ -27,6 +27,9 @@ function createTextElement(text) {
 }
 
 function createDom(fiber) {
+  if (!fiber) {
+    return;
+  }
   const domElement =
     fiber.type === "TEXT_ELEMENT"
       ? document.createTextNode("")
