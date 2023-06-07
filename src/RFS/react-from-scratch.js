@@ -82,7 +82,10 @@ function updateDom(domElement, prevProps, nextProps) {
 }
 
 function commitRoot() {
+  commitWork(wipRoot.child);
   deletions.forEach(commitWork);
+  deletions = []; // Clear the array after committing the work
+
   // Add nodes to root dom
   commitWork(wipRoot.child);
   currentRoot = wipRoot;

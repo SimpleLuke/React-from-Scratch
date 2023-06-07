@@ -15,6 +15,7 @@ function App(props) {
       <h2>My name is {props.value}</h2>
       <p>Count:{state}</p>
       <button onClick={() => setState((c) => c + 1)}>Click</button>
+      {state % 2 === 0 && <p>Even</p>}
     </div>
   );
 }
