@@ -10,6 +10,9 @@ function createElement(type, props, ...children) {
     props: {
       ...props,
       children: children.map((child) => {
+        if (typeof child === "boolean") {
+          return null;
+        }
         return typeof child === "object" ? child : createTextElement(child);
       }),
     },
