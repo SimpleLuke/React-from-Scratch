@@ -1,12 +1,5 @@
 import RFS from "./RFS/react-from-scratch";
 
-// const element = RFS.createElement(
-//   "div",
-//   { id: "foo" },
-//   RFS.createElement("a", null, "bar"),
-//   RFS.createElement("b")
-// );
-
 /** @jsxRuntime classic */
 /** @jsx RFS.createElement */
 function App(props) {
