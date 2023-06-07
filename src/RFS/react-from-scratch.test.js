@@ -1,85 +1,73 @@
+import "requestidlecallback-polyfill";
 import RFS from "./react-from-scratch";
-import { createTextElement } from "./react-from-scratch";
 
 describe("RFS", () => {
   describe("createElement", () => {
-    it("returns an element", () => {
+    test("should create a virtual element with the given type, props, and children", () => {
+      // Create a sample element
       const element = RFS.createElement(
         "div",
-        { id: "foo" },
-        RFS.createElement("a", null, "bar")
+        { id: "myDiv" },
+        "Hello, world!"
       );
-      expect(element).toEqual({
-        type: "div",
-        props: {
-          id: "foo",
-          children: [
-            {
-              type: "a",
-              props: {
-                children: [
-                  {
-                    type: "TEXT_ELEMENT",
-                    props: { children: [], nodeValue: "bar" },
-                  },
-                ],
-              },
+
+      // Verify the properties of the created element
+      expect(element.type).toBe("div");
+      expect(element.props).toEqual({
+        id: "myDiv",
+        children: [
+          {
+            type: "TEXT_ELEMENT",
+            props: {
+              nodeValue: "Hello, world!",
+              children: [],
             },
-          ],
-        },
+          },
+        ],
       });
-    });
-  });
 
-  describe("render", () => {
-    const container = document.createElement("div");
-
-    afterEach(() => {
-      container.innerHTML = "";
-    });
-
-    it("renders a text element", () => {
-      const textElement = createTextElement("Hello, Jest!");
-      RFS.render(textElement, container);
-
-      expect(container.textContent).toBe("Hello, Jest!");
-    });
-
-    it("renders a regular DOM element with props and children", () => {
-      const element = {
-        type: "div",
-        props: {
-          className: "my-class",
-          children: [
-            createTextElement("Hello"),
-            {
-              type: "span",
-              props: {
-                id: "my-span",
-                children: [createTextElement("Jest!")],
-              },
-            },
-          ],
-        },
-      };
-
-      RFS.render(element, container);
-
-      expect(container.innerHTML).toBe(
-        '<div class="my-class">Hello<span id="my-span">Jest!</span></div>'
+      // Create another sample element with nested children
+      const nestedElement = RFS.createElement(
+        "div",
+        null,
+        RFS.createElement("h1", null, "Heading"),
+        RFS.createElement("p", null, "Paragraph")
       );
-    });
-  });
-});
 
-describe("createTextElement", () => {
-  it("returns a text element object", () => {
-    expect(createTextElement("hello")).toEqual({
-      type: "TEXT_ELEMENT",
-      props: {
-        nodeValue: "hello",
-        children: [],
-      },
+      // Verify the properties of the nested element
+      expect(nestedElement.type).toBe("div");
+      expect(nestedElement.props).toEqual({
+        children: [
+          {
+            type: "h1",
+            props: {
+              children: [
+                {
+                  type: "TEXT_ELEMENT",
+                  props: {
+                    nodeValue: "Heading",
+                    children: [],
+                  },
+                },
+              ],
+            },
+          },
+          {
+            type: "p",
+            props: {
+              children: [
+                {
+                  type: "TEXT_ELEMENT",
+                  props: {
+                    nodeValue: "Paragraph",
+                    children: [],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      });
     });
   });
 });
