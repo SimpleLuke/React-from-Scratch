@@ -18,7 +18,7 @@ let hookIndex = null;
  * @param {...any} children - The child elements.
  * @returns {object} - The virtual element.
  */
-function createElement(type, props, ...children) {
+export function createElement(type, props, ...children) {
   return {
     type,
     props: {
@@ -53,7 +53,7 @@ export function createTextElement(text) {
  * @param {object} fiber - The fiber representing the element.
  * @returns {object} - The created DOM element.
  */
-function createDom(fiber) {
+export function createDom(fiber) {
   if (!fiber) {
     return;
   }

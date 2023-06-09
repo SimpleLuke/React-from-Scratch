@@ -1,6 +1,6 @@
 import "requestidlecallback-polyfill";
 import RFS from "./react-from-scratch";
-import { createTextElement } from "./react-from-scratch";
+import { createTextElement, createDom } from "./react-from-scratch";
 
 describe("RFS", () => {
   describe("createElement", () => {
@@ -82,6 +82,39 @@ describe("RFS", () => {
         nodeValue: text,
         children: [],
       });
+    });
+  });
+
+  describe("createDom", () => {
+    test("should create the actual DOM element associated with the given fiber", () => {
+      const fiber = {
+        type: "div",
+        props: {
+          id: "myDiv",
+          children: [],
+        },
+      };
+
+      const domElement = createDom(fiber);
+
+      expect(domElement.tagName).toBe("DIV");
+      expect(domElement.id).toBe("myDiv");
+      expect(domElement.childNodes.length).toBe(0);
+    });
+
+    test("should create a text node for TEXT_ELEMENT fiber type", () => {
+      const fiber = {
+        type: "TEXT_ELEMENT",
+        props: {
+          nodeValue: "Hello, world!",
+          children: [],
+        },
+      };
+
+      const domElement = createDom(fiber);
+
+      expect(domElement.nodeType).toBe(Node.TEXT_NODE);
+      expect(domElement.nodeValue).toBe("Hello, world!");
     });
   });
 });
