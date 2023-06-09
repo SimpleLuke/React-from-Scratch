@@ -38,7 +38,7 @@ function createElement(type, props, ...children) {
  * @param {string} text - The text value.
  * @returns {object} - The virtual text element.
  */
-function createTextElement(text) {
+export function createTextElement(text) {
   return {
     type: "TEXT_ELEMENT",
     props: {

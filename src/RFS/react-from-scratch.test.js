@@ -1,5 +1,6 @@
 import "requestidlecallback-polyfill";
 import RFS from "./react-from-scratch";
+import { createTextElement } from "./react-from-scratch";
 
 describe("RFS", () => {
   describe("createElement", () => {
@@ -67,6 +68,19 @@ describe("RFS", () => {
             },
           },
         ],
+      });
+    });
+  });
+
+  describe("createTextElement", () => {
+    test("should create a virtual text element with the given text value", () => {
+      const text = "Hello, world!";
+      const textElement = createTextElement(text);
+
+      expect(textElement.type).toBe("TEXT_ELEMENT");
+      expect(textElement.props).toEqual({
+        nodeValue: text,
+        children: [],
       });
     });
   });
