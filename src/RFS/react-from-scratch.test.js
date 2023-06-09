@@ -1,6 +1,6 @@
 import "requestidlecallback-polyfill";
 import RFS from "./react-from-scratch";
-import { createTextElement, createDom } from "./react-from-scratch";
+import { createTextElement, createDom, updateDom } from "./react-from-scratch";
 
 describe("RFS", () => {
   describe("createElement", () => {
@@ -115,6 +115,57 @@ describe("RFS", () => {
 
       expect(domElement.nodeType).toBe(Node.TEXT_NODE);
       expect(domElement.nodeValue).toBe("Hello, world!");
+    });
+  });
+
+  describe("updateDom", () => {
+    test("should update the DOM element with the new properties and event listeners", () => {
+      const domElement = {
+        onClick: true,
+        onMouseOver: null,
+        removeEventListener: jest.fn(function (eventType, handler) {
+          if (eventType === "click") {
+            this.onClick = null;
+          } else if (eventType === "mouseover") {
+            this.onMouseOver = null;
+          }
+        }),
+        addEventListener: jest.fn(function (eventType, handler) {
+          if (eventType === "click") {
+            this.onClick = true;
+          } else if (eventType === "mouseover") {
+            this.onMouseOver = true;
+          }
+        }),
+      };
+
+      const prevProps = {
+        className: "container",
+        onClick: true,
+      };
+
+      const nextProps = {
+        className: "updated-container",
+        onClick: true,
+        onMouseOver: true,
+      };
+
+      updateDom(domElement, prevProps, nextProps);
+
+      expect(domElement.className).toBe("updated-container");
+      expect(domElement.onClick).toBe(true);
+      expect(domElement.onMouseOver).toBe(true);
+
+      const removedProps = {
+        className: "updated-container",
+        onClick: jest.fn(),
+      };
+
+      updateDom(domElement, nextProps, removedProps);
+
+      expect(domElement.className).toBe("updated-container");
+      expect(domElement.onClick).toBe(true);
+      expect(domElement.onMouseOver).toBe(null);
     });
   });
 });

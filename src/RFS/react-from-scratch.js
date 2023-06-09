@@ -73,7 +73,7 @@ export function createDom(fiber) {
  * @param {object} prevProps - The previous properties.
  * @param {object} nextProps - The next properties.
  */
-function updateDom(domElement, prevProps, nextProps) {
+export function updateDom(domElement, prevProps, nextProps) {
   const isEvent = (key) => key.startsWith("on");
   const isProperty = (key) => key !== "children" && !isEvent(key);
   const isNew = (prev, next) => (key) => prev[key] !== next[key];
