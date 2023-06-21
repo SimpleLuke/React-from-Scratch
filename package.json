@@ -37,10 +37,5 @@
   },
   "devDependencies": {
     "requestidlecallback-polyfill": "^1.0.2"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
   }
 }
